@@ -14,6 +14,8 @@ NOTE: dump will run in mapreduce mode => set opt.fetch false.
 If you wont't set "set opt.fetch.false" then  you'll get error 1066 i.e Unable to open iterator for alias Dump_Variable_Name. It is because 
 "When the DUMP operator is used to execute Pig Latin statements, Pig can take the advantage to minimize latency by directly reading data from HDFS rather than launching MapReduce jobs".
 
+You can download data for this example from here: 
+https://github.com/decsourabh/BIG-DATA/blob/master/movies_data.txt
 
 To Load data from HDFS 
 movies = LOAD '/inputs/movies_data' USING PigStorage(',') AS (id, movies, year, rating, duration);
