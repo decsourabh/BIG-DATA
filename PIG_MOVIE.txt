@@ -1,0 +1,40 @@
+Pre-Requisites:
+-You should have installed latest version of PIG
+-In .bashrc you should set:
+  export PIG_HOME=Directory of PIG
+  export PATH=$PATH:$PIG_HOME/bin
+
+-You should have zookeeper-*.jar in $PIG_HOME/lib
+-All the daemons of HDFS and YARN should be running along with JobHistoryServer. PIG relies on this server. If you enter history in grunt shell then you'll get the list of commands that you entered.You can use following command from $HADOOP_HOME to start JobHistoryServer:
+    sbin/mr-jobhistory-daemon.sh --config $PIG_HOME/etc/hadoop/ start historyserver
+
+
+
+NOTE: dump will run in mapreduce mode => set opt.fetch false.
+If you wont't set "set opt.fetch.false" then  you'll get error 1066 i.e Unable to open iterator for alias Dump_Variable_Name. It is because 
+"When the DUMP operator is used to execute Pig Latin statements, Pig can take the advantage to minimize latency by directly reading data from HDFS rather than launching MapReduce jobs".
+
+
+To Load data from HDFS 
+movies = LOAD '/inputs/movies_data' USING PigStorage(',') AS (id, movies, year, rating, duration);
+
+
+We are trying to get the movies which have greater than 4 rating
+rating greater than 4 => movies_greater_than_4 = FILTER movies BY (float)rating>4.0;
+
+
+List the movies that were released between 1980 and 2000 => between_1980_2000 = FILTER movies by year>1980 and year<2000;
+
+movies_duration_greater_than_3hrs = FILTER movies by duration>10800;
+
+movie_duration = FOREACH movies GENERATE movies, (duration/60*60);
+
+List the years and the number of movies released each year => grouped_by_year = GROUP movies by year;
+                                                            => count_by_year = FOREACH grouped_by_year GENERATE group, COUNT(movies) 
+
+List all the movies in the descending order of year => movies_by_descending_order = ORDER movies BY year DESC
+
+USE LIMIT => top_10_movies = LIMIT movies 10;
+
+sample keyword to get sample set from your data => sample_40_percent = SAMPLE movies 0.4
+
