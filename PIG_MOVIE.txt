@@ -29,7 +29,7 @@ List the movies that were released between 1980 and 2000 => between_1980_2000 = 
 
 movies_duration_greater_than_3hrs = FILTER movies by duration>10800;
 
-movie_duration = FOREACH movies GENERATE movies, (duration/60*60);
+movie_duration = FOREACH movies GENERATE (duration/60*60);
 
 List the years and the number of movies released each year => grouped_by_year = GROUP movies by year;
                                                             => count_by_year = FOREACH grouped_by_year GENERATE group, COUNT(movies) 
